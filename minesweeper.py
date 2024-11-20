@@ -4,7 +4,8 @@ import random
 
 class Minesweeper():
     """
-    Minesweeper game representation
+    Represents the Minesweeper game board and mine positions
+    
     """
 
     def __init__(self, height=8, width=8, mines=8):
@@ -145,7 +146,8 @@ class Sentence():
 
 class MinesweeperAI():
     """
-    Minesweeper game player
+    >>>>> Solver: AI logic to deduce safe moves and mines using knowledge-based reasoning.
+
     """
 
     def __init__(self, height=8, width=8):
@@ -165,9 +167,10 @@ class MinesweeperAI():
         self.knowledge = []
 
     def mark_mine(self, cell):
+
         """
-        Marks a cell as a mine, and updates all knowledge
-        to mark that cell as a mine as well.
+        >>>>> Solver: Marks a cell as a mine and updates the knowledge base to reflect this information.
+              Ensures the AI avoids choosing this cell in future moves.
         """
         self.mines.add(cell)
         for sentence in self.knowledge:
@@ -175,28 +178,25 @@ class MinesweeperAI():
 
     def mark_safe(self, cell):
         """
-        Marks a cell as safe, and updates all knowledge
-        to mark that cell as safe as well.
+        >>>>> Solver: Marks a cell as safe and updates the knowledge base.
+              This allows the AI to confidently choose this cell in future moves.
         """
+
         self.safes.add(cell)
         for sentence in self.knowledge:
             sentence.mark_safe(cell)
 
     def add_knowledge(self, cell, count):
         """
-        Called when the Minesweeper board tells us, for a given
-        safe cell, how many neighboring cells have mines in them.
+        >>>>> Solver: Updates AI's knowledge when a safe cell and its nearby mine count are revealed.
 
-        This function should:
-            1) mark the cell as a move that has been made
-            2) mark the cell as safe
-            3) add a new sentence to the AI's knowledge base
-               based on the value of `cell` and `count`
-            4) mark any additional cells as safe or as mines
-               if it can be concluded based on the AI's knowledge base
-            5) add any new sentences to the AI's knowledge base
-               if they can be inferred from existing knowledge
+        Steps:
+        1) Mark the revealed cell as safe.
+        2) Add a new logical sentence to the knowledge base, based on the cell's neighbors.
+        3) Deduce new safes and mines from existing knowledge.
+        4) Infer additional sentences by comparing current sentences in the knowledge base.
         """
+
         # Mark cell as safe and add to moves_made
         self.mark_safe(cell)
         self.moves_made.add(cell)
@@ -248,12 +248,9 @@ class MinesweeperAI():
 
     def make_safe_move(self):
         """
-        Returns a safe cell to choose on the Minesweeper board.
-        The move must be known to be safe, and not already a move
-        that has been made.
+        >>>>> Solver: Chooses a cell that is known to be safe based on the knowledge base.
+        This ensures the AI avoids triggering a mine.
 
-        This function may use the knowledge in self.mines, self.safes
-        and self.moves_made, but should not modify any of those values.
         """
         safeCells = self.safes - self.moves_made
         if not safeCells:
@@ -264,10 +261,9 @@ class MinesweeperAI():
 
     def make_random_move(self):
         """
-        Returns a move to make on the Minesweeper board.
-        Should choose randomly among cells that:
-            1) have not already been chosen, and
-            2) are not known to be mines
+        >>>>> Solver: Selects a random move from unexplored cells that are not known to be mines.
+              Used as a fallback when no logical safe moves are available.
+
         """
         all_moves = set()
         for i in range(self.height):
@@ -280,8 +276,17 @@ class MinesweeperAI():
         # Return available
         move = random.choice(tuple(all_moves))
         return move
-               
+
+    # ---------------- Helper function ----------------        
     def get_cell_neighbors(self, cell, count):
+
+        """
+        >>>>> Solver: Identifies all neighboring cells of a given cell that are not already known to be safe or mines.
+              Adjusts the count of nearby mines based on known mines.
+              This is crucial for constructing new logical sentences.
+
+        """
+
         i, j = cell
         neighbors = []
 
@@ -299,6 +304,10 @@ class MinesweeperAI():
         return neighbors, count
 
     def remove_dups(self):
+        """
+        >>>>> Solver: Removes duplicate sentences from the knowledge base.
+              Keeps the reasoning process efficient and avoids redundant checks.
+        """
         unique_knowledge = []
         for s in self.knowledge:
             if s not in unique_knowledge:
@@ -306,6 +315,12 @@ class MinesweeperAI():
         self.knowledge = unique_knowledge
 
     def remove_sures(self):
+        """
+        >>>> Solver: Processes sentences in the knowledge base to identify and handle fully solved sentences:
+        - Marks all cells as safe if the sentence contains no mines.
+        - Marks all cells as mines if the sentence's count equals its size.
+        
+        """
         final_knowledge = []
         for s in self.knowledge:
             final_knowledge.append(s)

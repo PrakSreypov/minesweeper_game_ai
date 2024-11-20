@@ -10,9 +10,9 @@ MINES = 8
 
 # Colors
 BLACK = (0, 0, 0)
-GRAY = (180, 180, 180)
+DARK_GREEN = (50, 205, 50)
 WHITE = (255, 255, 255)
-PINK = (255, 192, 203)
+LIGHT_GREEN = (152, 251, 152)
 RED = (255, 0, 0)
 
 # Create game
@@ -125,7 +125,7 @@ while True:
                 board_origin[1] + i * cell_size,
                 cell_size, cell_size
             )
-            pygame.draw.rect(screen, GRAY, rect)
+            pygame.draw.rect(screen, DARK_GREEN, rect)
             pygame.draw.rect(screen, WHITE, rect, 3)
 
             # Add a mine, flag, or number if needed
@@ -145,7 +145,7 @@ while True:
                 neighborsTextRect.center = rect.center
                 screen.blit(neighbors, neighborsTextRect)
             elif (i, j) in ai.safes and showInference:
-                pygame.draw.rect(screen, PINK, rect)
+                pygame.draw.rect(screen, LIGHT_GREEN, rect)
                 pygame.draw.rect(screen, WHITE, rect, 3)
             elif (i, j) in ai.mines and showInference:
                 pygame.draw.rect(screen, RED, rect)
