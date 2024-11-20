@@ -1,47 +1,172 @@
-![build-passing](https://img.shields.io/badge/Build-passing-success?style=flat-square)
-![test-passing](https://img.shields.io/badge/Tests-passing-success?style=flat-square)
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-informational?style=flat-square)](https://www.python.org/)
-[![made-with-pygame](https://img.shields.io/badge/Made%20With-Pygame-informational?style=flat-square)](https://www.pygame.org/)
+# **Minesweeper with AI and Pygame**
 
+## **Introduction**
+This project is a Python implementation of the classic Minesweeper game, enhanced with an AI-powered solver. The AI uses logical reasoning to deduce the positions of mines and safe cells. The game is designed with a graphical interface created using **Pygame**.
 
-# Minesweeper
-### Harvard CS50's Introduction to Artificial Intelligence with Python (Project 1)
+---
 
-Minesweeper game powered with an AI assistant to help you dodge all those dangerous mines!
+## **Features**
+1. **Classic Minesweeper Gameplay**:
+   - Reveal cells to find mines.
+   - Right-click to flag cells as mines.
+   - Avoid detonating a mine to win the game.
 
-## Description
-In this project, **Artificial Intelligence** assistant is integrated in the famous **Minesweeper** game. So, it provides a lot of cool features like allowing the AI to play the whole game or just make a single move.<br>
-This is done by using **Propositional Logic** and **Inference Rules** to deduce whether a cell is *safe* or not. As the game goes on, more knowledge is collected with each move and the AI tries to deduce the *status* of cells.<br>
-For example, if we know that a cell has **0** mines around it, we can mark all the cells around it (one step away) as **safe**. Similarly, if we know that a cell has **1** mine around it and there is only one unrevelead cell next to it, we can mark the unrevealed cell as **mine**. These are just basic examples of the inference rules used in this project.
+2. **AI Solver**:
+   - The AI uses a **knowledge base** and logical reasoning to identify safe cells or mines.
+   - Incorporates:
+     - **Safe move deduction**: Based on known information, marks certain cells as safe.
+     - **Random move fallback**: If no logical move is available, the AI makes a random move.
+     - **Inference system**: The AI learns from every revealed cell and updates its knowledge base.
 
-## Features
-Other than the basic gameplay, this project offers the following features as well:
-- **AI Move:** If you are not sure about your next move, let the AI do it for you. The AI assistant will make the *best* move possible. Note, that it might select a mine cell because of lack of knowledge resulting in a lost game.
-- **Autoplay:** This feature allows you to sit back and watch the AI play for itself. It will start from making random moves and then choose safe moves as more and more knowledge is accumulated.
-- **Show Inference:** You can easily visualize the inferences made by the AI! It will color the cells that are confirmed as either *safe* (PINK) or *mine* (RED) so that you can *stay safe*!
+3. **Graphical User Interface**:
+   - Interactive grid for gameplay.
+   - Visual elements for flags, mines, and revealed cells.
+   - Dynamic buttons for:
+     - Autoplaying with AI.
+     - Showing AI inferences (safe and mine predictions).
+     - Resetting the game.
 
-## Screenshots
-<p align="center" style="font-size:12px;color:dimgray;">Autoplay with Inference Shown <strong>(GIF - 25 seconds)</strong></p>
-<p align="center">
-    <img src="assets/gui/autoplay.gif" alt="Autoplay"/>
-</p>
-<hr>
-<p align="center" style="font-size:12px;color:dimgray">Main Menu</p>
-<p align="center">
-    <img src="assets/gui/main-menu.png" alt="Main Menu"/>
-</p>
-<hr>
-<p align="center" style="font-size:12px;color:dimgray">Start Screen</p>
-<p align="center">
-    <img src="assets/gui/start-screen.png" alt="Start Screen"/>
-</p>
-<hr>
-<p align="center" style="font-size:12px;color:dimgray">Gameplay with Inference Hidden</p>
-<p align="center">
-    <img src="assets/gui/gameplay.png" alt="Gameplay"/>
-</p>
-<hr>
-<p align="center" style="font-size:12px;color:dimgray">Gameplay with Inference Shown</p>
-<p align="center">
-    <img src="assets/gui/gameplay-inference.png" alt="Gameplay with Inference"/>
-</p>
+4. **Autoplay**:
+   - Watch the AI automatically solve the Minesweeper board step-by-step.
+
+---
+
+## **Getting Started**
+
+### **Prerequisites**
+- Python 3.x
+- Install the following Python libraries:
+  ```bash
+  pip install pygame
+  ```
+
+### **Files in the Project**
+1. **`minesweeper.py`**: Contains the game logic and AI logic.
+2. **`main.py`**: Runs the graphical interface using Pygame.
+3. **Assets**:
+   - **Fonts**: Located in `assets/fonts/` (e.g., `OpenSans-Regular.ttf`).
+   - **Images**: Located in `assets/images/` (e.g., `flag.png`, `mine.png`).
+
+---
+
+## **How to Run**
+
+1. **Clone or Download the Repository**:
+   - Clone the repository or download it as a zip file.
+
+2. **Navigate to the Project Directory**:
+   ```bash
+   cd <project-directory>
+   ```
+
+3. **Run the Game**:
+   ```bash
+   python runner.py
+   ```
+
+---
+
+## **Game Instructions**
+
+### **Objective**:
+Mark all the mines on the board without triggering any of them.
+
+### **Controls**:
+- **Left-Click**: Reveal a cell.
+- **Right-Click**: Flag a cell as a mine.
+- **Buttons**:
+  - **Autoplay**: Lets the AI take over and solve the board.
+  - **AI Move**: Allows the AI to make a single move.
+  - **Reset**: Resets the game to start over.
+  - **Show Inference**: Highlights AI's safe and mine predictions.
+
+### **Win Condition**:
+- Flag all mines correctly without triggering any.
+
+### **Lose Condition**:
+- Clicking on a mine detonates it, ending the game.
+
+---
+
+## **AI Algorithm**
+
+### **Core Concepts**:
+1. **Knowledge Base**:
+   - The AI maintains a set of logical **sentences** about the game board.
+   - Each sentence represents a relationship between a group of cells and the number of mines in them.
+
+2. **Inference**:
+   - The AI deduces:
+     - **Safe cells**: Cells that can be revealed without risk.
+     - **Mines**: Cells that must contain mines.
+   - It uses techniques like **subset reasoning** to infer new information.
+
+3. **Fallback**:
+   - When no safe move can be logically deduced, the AI chooses a random unexplored cell.
+
+---
+
+## **Code Overview**
+
+### **`minesweeper.py`**
+
+1. **`Minesweeper` Class**:
+   - Handles the game board and mine placement.
+   - Tracks the number of nearby mines for any cell.
+   - Provides utility methods for checking mines and determining win/loss states.
+
+2. **`Sentence` Class**:
+   - Represents logical statements about cells and their mine counts.
+   - Provides methods for marking cells as safe or mines, enabling the AI to refine its knowledge base.
+
+3. **`MinesweeperAI` Class**:
+   - Implements the AI logic to deduce safe cells and mines.
+   - Maintains knowledge of all moves made, safe cells, and mines.
+   - Dynamically updates its knowledge base with each new revelation.
+
+---
+
+### **`runner.py`**
+
+1. **Game Setup**:
+   - Initializes the Minesweeper board and AI.
+   - Loads assets (e.g., images and fonts) for rendering.
+
+2. **Graphical User Interface**:
+   - Displays the Minesweeper board, cells, and interactive buttons.
+   - Highlights flagged cells, revealed cells, and inferred safe/mine cells.
+
+3. **Gameplay Loop**:
+   - Handles user input for cell clicks and button presses.
+   - Integrates AI to make safe or random moves during autoplay.
+
+---
+
+## **Project Structure**
+```plaintext
+📂 Project Folder
+├── 📂 assets
+│   ├── 📂 fonts
+│   │   └── OpenSans-Regular.ttf
+│   ├── 📂 images
+│       ├── flag.png
+│       ├── mine.png
+│       ├── mine-red.png
+├── .gitignore
+├── minesweeper.py
+├── README.py
+└── runner.py
+```
+
+---
+
+## **Future Improvements**
+- Add support for customizable grid sizes and mine counts through a user interface.
+- Improve AI inference for edge cases with low mine densities.
+- Include a leaderboard to track game completions and performance metrics.
+
+--- 
+
+## **Acknowledgments**
+- **Pygame**: For creating an intuitive library to design 2D games.
+- **Inspiration**: The classic Minesweeper game and AI algorithms based on logical reasoning.
