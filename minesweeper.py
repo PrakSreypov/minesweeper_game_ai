@@ -1,6 +1,4 @@
-import itertools
 import random
-
 
 class Minesweeper():
     """
@@ -49,15 +47,14 @@ class Minesweeper():
             print("|")
         print("--" * self.width + "-")
 
+    # Checks if a specific cell contains a mine.
     def is_mine(self, cell):
         i, j = cell
         return self.board[i][j]
 
     def nearby_mines(self, cell):
         """
-        Returns the number of mines that are
-        within one row and column of a given cell,
-        not including the cell itself.
+        Counts the number of mines around a specific cell.
         """
 
         # Keep count of nearby mines
@@ -87,9 +84,7 @@ class Minesweeper():
 
 class Sentence():
     """
-    Logical statement about a Minesweeper game
-    A sentence consists of a set of board cells,
-    and a count of the number of those cells which are mines.
+    >>>>> Solver: Represents a logical statement about Minesweeper cells (e.g., "these cells contain X mines").
     """
 
     def __init__(self, cells, count):
@@ -104,7 +99,9 @@ class Sentence():
 
     def known_mines(self):
         """
-        Returns the set of all cells in self.cells known to be mines.
+        >>>>> Solver: Returns cells that are definitely mines based on this sentence.
+        Used to mark mines in the AI's knowledge base.
+
         """
         if len(self.cells) == self.count:
             return self.cells
@@ -112,7 +109,8 @@ class Sentence():
 
     def known_safes(self):
         """
-        Returns the set of all cells in self.cells known to be safe.
+        >>>>> Solver: Returns cells that are definitely safe based on this sentence.
+        Used to mark safes in the AI's knowledge base.
         """
         if self.count == 0:
             return self.cells
@@ -120,9 +118,10 @@ class Sentence():
 
     def mark_mine(self, cell):
         """
-        Updates internal knowledge representation given the fact that
-        a cell is known to be a mine.
+        >>>>> Solver: Updates the sentence to account for a known mine, reducing the count.
+        Critical for reasoning about remaining unknown cells.
         """
+
         newCells = set()
         for item in self.cells:
             if item != cell:
@@ -133,8 +132,8 @@ class Sentence():
 
     def mark_safe(self, cell):
         """
-        Updates internal knowledge representation given the fact that
-        a cell is known to be safe.
+        >>>>> Solver: Updates the sentence to account for a known safe cell.
+        Helps refine logical deductions about other cells.
         """
         newCells = set()
         for item in self.cells:
